@@ -3,76 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADBOSS Face Scanner</title>
+  <title>ADBOSS - Your AI Assistant</title>
   <style>
+    /* Reset & Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
     body {
-      font-family: sans-serif;
-      background: #e0f7ff;
+      background: linear-gradient(to right, #141e30, #243b55);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
       text-align: center;
-      padding-top: 50px;
     }
 
-    .option-card {
-      display: inline-block;
-      background: #fff;
-      padding: 20px;
-      border-radius: 15px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-      font-size: 20px;
-      font-weight: 600;
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: #ddd;
+    }
+
+    .btn {
+      background-color: #00c9a7;
+      color: white;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
       cursor: pointer;
-      transition: transform 0.3s ease;
+      transition: background 0.3s ease;
+      text-decoration: none;
     }
 
-    .option-card:hover {
-      transform: scale(1.05);
-      background: #ccf7ff;
+    .btn:hover {
+      background-color: #00b08b;
     }
 
-    form {
-      display: none;
+    footer {
+      margin-top: 50px;
+      font-size: 0.9rem;
+      color: #aaa;
     }
   </style>
 </head>
 <body>
 
-  <h1>🔮 Scan Your Face for Future Prediction</h1>
+  <h1>🤖 Welcome to ADBOSS</h1>
+  <p>Your Smart AI Assistant for Ads, Business & Support</p>
+  <a class="btn" href="#">Start Exploring</a>
 
-  <div class="option-card" onclick="document.getElementById('photoUploader').click()">
-    📸 Tap to Scan Face
-  </div>
+  <footer>
+    &copy; 2025 ADBOSS | Powered by Tidio
+  </footer>
 
-  <!-- Hidden form -->
-  <form id="photoForm">
-    <input type="file" name="user_photo" id="photoUploader" accept="image/*" onchange="sendPhoto()" />
-  </form>
-
-  <!-- EmailJS Script -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
-  <script>
-    // Replace below with your EmailJS public key
-    emailjs.init("YOUR_PUBLIC_KEY");
-
-    function sendPhoto() {
-      const form = document.getElementById("photoForm");
-      const fileInput = document.getElementById("photoUploader");
-
-      if (!fileInput.files.length) {
-        alert("❌ No file selected!");
-        return;
-      }
-
-      emailjs.sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", form)
-        .then(() => {
-          alert("✅ Face scanned! Prediction in process...");
-          fileInput.value = ""; // Reset file input
-        })
-        .catch((err) => {
-          alert("❌ Upload failed. Try again.");
-          console.error("EmailJS error:", err);
-        });
-    }
-  </script>
+  <!-- ✅ Tidio Chatbot Script (Paste Here) -->
+  <script src="//code.tidio.co/hraocft325vcbswgy5rpwhgju5jbvtmf.js" async></script>
 
 </body>
 </html>
