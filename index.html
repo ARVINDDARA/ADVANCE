@@ -1,76 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>ADBOSS - Your AI Assistant</title>
-  <style>
-    /* Reset & Base */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    body {
-      background: linear-gradient(to right, #141e30, #243b55);
-      color: white;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 40px 20px;
-      text-align: center;
-    }
-
-    h1 {
-      font-size: 3rem;
-      margin-bottom: 10px;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      color: #ddd;
-    }
-
-    .btn {
-      background-color: #00c9a7;
-      color: white;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      text-decoration: none;
-    }
-
-    .btn:hover {
-      background-color: #00b08b;
-    }
-
-    footer {
-      margin-top: 50px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PANCH PANDAVS - The Ultimate Battle</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #111;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+        
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #main-menu {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            z-index: 10;
+        }
+        
+        #main-menu h1 {
+            font-size: 4rem;
+            color: #ffcc00;
+            text-shadow: 3px 3px 0 #aa0000;
+            margin-bottom: 2rem;
+        }
+        
+        #main-menu button {
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.5rem;
+            background: #aa0000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        #main-menu button:hover {
+            background: #ff0000;
+            transform: scale(1.1);
+        }
+        
+        #game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #game-canvas {
+            background: linear-gradient(#1a1a2e, #16213e);
+            display: block;
+        }
+        
+        #hud {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            display: flex;
+            gap: 20px;
+        }
+        
+        #hero-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        #hero-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid gold;
+        }
+        
+        #coins, #health {
+            background: rgba(0,0,0,0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
+    <div id="game-container">
+        <div id="main-menu">
+            <h1>PANCH PANDAVS</h1>
+            <button id="start-btn">START GAME</button>
+            <button id="settings-btn">SETTINGS</button>
+        </div>
 
-  <h1>🤖 Welcome to ADBOSS</h1>
-  <p>Your Smart AI Assistant for Ads, Business & Support</p>
-  <a class="btn" href="#">Start Exploring</a>
+        <div id="game-screen" style="display: none;">
+            <canvas id="game-canvas"></canvas>
+            <div id="hud">
+                <div id="hero-info">
+                    <img id="hero-icon" src="https://via.placeholder.com/50" alt="Hero">
+                    <span id="hero-name">ADBOSS</span>
+                    <span id="hero-power">TIME STOP</span>
+                </div>
+                <div id="coins">Coins: 0</div>
+                <div id="health">Health: 100%</div>
+            </div>
+        </div>
+    </div>
 
-  <footer>
-    &copy; 2025 ADBOSS | Powered by Tidio
-  </footer>
+    <script>
+        // Game Constants
+        const HEROES = [
+            {
+                name: "ADBOSS",
+                power: "TIME STOP",
+                color: "#ff5555",
+                dialogue: "अब रुकेगा वक्त!",
+                key: "1"
+            },
+            {
+                name: "ARVIND",
+                power: "PIG ATTACK",
+                color: "#55ff55",
+                dialogue: "मेरे सूअर संभालेंगे!",
+                key: "2"
+            },
+            {
+                name: "ARYANSH",
+                power: "BLUECOW JUMP",
+                color: "#5555ff",
+                dialogue: "नीली गाय की उड़ान से कोई नहीं बचेगा!",
+                key: "3"
+            },
+            {
+                name: "SAWAI",
+                power: "BULL ATTACK",
+                color: "#ffff55",
+                dialogue: "भैंसा आएगा, उड़ाएगा!",
+                key: "4"
+            },
+            {
+                name: "ARYANSH",
+                power: "X-RAY LASER",
+                color: "#ff55ff",
+                dialogue: "मेरी नज़र से कोई नहीं बचेगा!",
+                key: "5"
+            }
+        ];
 
-  <!-- ✅ Tidio Chatbot Script (Paste Here) -->
-  <script src="//code.tidio.co/hraocft325vcbswgy5rpwhgju5jbvtmf.js" async></script>
+        // Game Variables
+        let canvas, ctx;
+        let gameRunning = false;
+        let coins = 0;
+        let health = 100;
+        let currentHero = 0;
+        let heroX = 100;
+        let heroY = 100;
+        let enemies = [];
+        let projectiles = [];
+        let pigs = [];
+        let gameTime = 0;
+        let timeStopped = false;
 
-</body>
-</html>
+        // Initialize Game
+        function initGame() {
+            canvas = document.getElementById('game-canvas');
+            ctx = canvas.getContext('2d');
+            
+            // Set canvas size
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            // Event listeners
+            document.getElementById('start-btn').addEventListener('click', startGame);
+            window.addEventListener('keydown', handleKeyPress);
+            window.addEventListener('resize', resizeCanvas);
+        }
+
+        // Start Game
+        function startGame() {
+            document.getElementById('main-menu').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            
+            // Reset game state
+            coins = 0;
+            health = 100;
+            currentHero = 0;
+            enemies = [];
+            projectiles = [];
+            pigs = [];
+            gameTime = 0;
+            
+            updateHUD();
+            gameRunning = true;
+            
+            // Start game loop
+            requestAnimationFrame(gameLoop);
+            
+            // Spawn enemies periodically
+            setInterval(spawnEnemy, 2000);
+        }
+
+        // Game Loop
+        function gameLoop(timestamp) {
+            if (!gameRunning) return;
+            
+            // Clear canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Update game time
+            if (!timeStopped) {
+                gameTime += 1;
+            }
+            
+            // Draw hero
+            drawHero();
+            
+            // Update and draw enemies
+            updateEnemies();
+            
+            // Update and draw projectiles
+            updateProjectiles();
+            
+            // Update and draw pigs (for ARVIND's power)
+            updatePigs();
+            
+            // Continue game loop
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Draw Hero
+        function drawHero() {
+            ctx.fillStyle = HEROES[currentHero].color;
+            ctx.beginPath();
+            ctx.arc(heroX, heroY, 20, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Draw hero name
+            ctx.fillStyle = 'white';
+            ctx.font = '12px Arial';
+            ctx.fillText(HEROES[currentHero].name, heroX - 20, heroY - 25);
+        }
+
+        // Spawn Enemy
+        function spawnEnemy() {
+            if (!gameRunning || timeStopped) return;
+            
+            const enemy = {
+                x: canvas.width,
+                y: Math.random() * (canvas.height - 100) + 50,
+                width: 40,
+                height: 40,
+                speed: 2 + Math.random() * 2,
+                health: 30
+            };
+            
+            enemies.push(enemy);
+        }
+
+        // Update Enemies
+        function updateEnemies() {
+            for (let i = 0; i < enemies.length; i++) {
+                const enemy = enemies[i];
+                
+                if (!timeStopped) {
+                    enemy.x -= enemy.speed;
+                }
+                
+                // Draw enemy
+                ctx.fillStyle = '#aa0000';
+                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
+                
+                // Draw health bar
+                ctx.fillStyle = 'red';
+                ctx.fillRect(enemy.x, enemy.y - 10, enemy.width, 5);
+                ctx.fillStyle = 'green';
+                ctx.fillRect(enemy.x, enemy.y - 10, enemy.width * (enemy.health / 30), 5);
+                
+                // Check collision with hero
+                if (checkCollision(
+                    { x: heroX, y: heroY, radius: 20 },
+                    { x: enemy.x + enemy.width/2, y: enemy.y + enemy.height/2, radius: 20 }
+                )) {
+                    health -= 5;
+                    updateHUD();
+                    enemies.splice(i, 1);
+                    i--;
+                    
+                    if (health <= 0) {
+                        gameOver();
+                    }
+                }
+                
+                // Remove if off screen
+                if (enemy.x < -enemy.width) {
+                    enemies.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        // Update Projectiles
+        function updateProjectiles() {
+            for (let i = 0; i < projectiles.length; i++) {
+                const proj = projectiles[i];
+                
+                if (!timeStopped) {
+                    proj.x += proj.speedX;
+                    proj.y += proj.speedY;
+                }
+                
+                // Draw projectile
+                ctx.fillStyle = proj.color;
+                ctx.beginPath();
+                ctx.arc(proj.x, proj.y, proj.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Check collision with enemies
