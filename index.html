@@ -3,334 +3,481 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PANCH PANDAVS - The Ultimate Battle</title>
+    <title>ADBOSS Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            background: #111;
-            font-family: 'Arial', sans-serif;
-            overflow: hidden;
-            color: white;
-        }
-        
-        #game-container {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-        }
-        
-        #main-menu {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            font-family: 'Poppins', sans-serif;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(to right, #4facfe, #00f2fe); /* Attractive gradient background */
+            color: #333;
+        }
+        #game-container {
+            background-color: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Subtle border */
+        }
+        h1 {
+            color: #0056b3; /* Darker blue for title */
+            margin-bottom: 25px;
+            font-size: 2.5em;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        #balance {
+            font-size: 1.6em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #28a745; /* Green for balance */
+            background-color: #e6ffe6; /* Light green background */
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        #timer {
+            font-size: 4em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            color: #dc3545; /* Red for timer */
+            animation: pulse 1.5s infinite alternate; /* Pulsing effect for timer */
+        }
+        @keyframes pulse {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        #color-display {
+            width: 180px;
+            height: 180px;
+            background-color: grey; /* Default color */
+            border-radius: 50%; /* Circle shape */
+            margin: 0 auto 25px auto;
+            border: 5px solid #ccc;
+            display: flex;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            z-index: 10;
+            font-size: 3em;
+            font-weight: bold;
+            color: white; /* Text color for the number */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transition: background-color 0.5s ease-in-out; /* Smooth color transition */
         }
-        
-        #main-menu h1 {
-            font-size: 4rem;
-            color: #ffcc00;
-            text-shadow: 3px 3px 0 #aa0000;
-            margin-bottom: 2rem;
-        }
-        
-        #main-menu button {
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 1.5rem;
-            background: #aa0000;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        #main-menu button:hover {
-            background: #ff0000;
-            transform: scale(1.1);
-        }
-        
-        #game-screen {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        
-        #game-canvas {
-            background: linear-gradient(#1a1a2e, #16213e);
-            display: block;
-        }
-        
-        #hud {
-            position: absolute;
-            top: 10px;
-            left: 10px;
+        .betting-section {
+            margin-top: 30px;
+            padding: 25px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background-color: #fafafa;
             display: flex;
-            gap: 20px;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); /* Inner shadow */
         }
-        
-        #hero-info {
+        .betting-section h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .bet-option {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: rgba(0,0,0,0.5);
-            padding: 5px 10px;
-            border-radius: 5px;
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 350px;
+            justify-content: space-between; /* Distribute items */
         }
-        
-        #hero-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 2px solid gold;
+        .bet-option label {
+            margin-right: 15px;
+            font-weight: 600;
+            color: #555;
+            flex-shrink: 0; /* Prevent label from shrinking */
         }
-        
-        #coins, #health {
-            background: rgba(0,0,0,0.5);
-            padding: 5px 10px;
+        .betting-section select,
+        .betting-section input[type="number"] {
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            width: calc(100% - 120px); /* Adjust width */
+            box-sizing: border-box;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        .betting-section select:focus,
+        .betting-section input[type="number"]:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 5px rgba(0,123,255,0.2);
+        }
+        .betting-section button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            margin-top: 15px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,123,255,0.2);
+        }
+        .betting-section button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+        }
+        .betting-section button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 5px rgba(0,123,255,0.3);
+        }
+        #bet-info {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.1em;
+            padding: 10px;
             border-radius: 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        .win {
+            color: #28a745;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .lose {
+            color: #dc3545;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+        .neutral {
+            color: #333;
+            background-color: #e9ecef;
+            border-color: #dee2e6;
+        }
+
+        #past-predictions {
+            margin-top: 30px;
+            padding: 25px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            background-color: #fafafa;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            text-align: left;
+        }
+        #past-predictions h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            text-align: center;
+        }
+        #predictions-list {
+            list-style: none;
+            padding: 0;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+        }
+        #predictions-list li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #predictions-list li:last-child {
+            border-bottom: none;
+        }
+        #predictions-list li span {
+            font-weight: 500;
+        }
+        .profit-positive {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .profit-negative {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .profit-neutral {
+            color: #555;
+            font-weight: bold;
+        }
+
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            #game-container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 2em;
+            }
+            #timer {
+                font-size: 3em;
+            }
+            #color-display {
+                width: 140px;
+                height: 140px;
+                font-size: 2.5em;
+            }
+            .bet-option {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .bet-option label {
+                margin-bottom: 5px;
+            }
+            .betting-section select,
+            .betting-section input[type="number"] {
+                width: 100%;
+            }
+            #past-predictions {
+                padding: 15px;
+            }
         }
     </style>
 </head>
 <body>
     <div id="game-container">
-        <div id="main-menu">
-            <h1>PANCH PANDAVS</h1>
-            <button id="start-btn">START GAME</button>
-            <button id="settings-btn">SETTINGS</button>
+        <h1>ADBOSS PREDICTION</h1>
+        <div id="balance">Balance: ₹50</div>
+        <div id="timer">30</div>
+        <div id="color-display">?</div>
+
+        <div class="betting-section">
+            <h2>Place Your Bet</h2>
+            <div class="bet-option">
+                <label for="color-select">Color:</label>
+                <select id="color-select">
+                    <option value="red">Red</option>
+                    <option value="green">Green</option>
+                    <option value="blue">Blue</option>
+                </select>
+            </div>
+            <div class="bet-option">
+                <label for="number-input">Number (1-10):</label>
+                <input type="number" id="number-input" min="1" max="10" placeholder="Enter number">
+            </div>
+            <div class="bet-option">
+                <label for="bet-amount">Amount:</label>
+                <input type="number" id="bet-amount" placeholder="Enter amount" min="1">
+            </div>
+            <button id="place-bet-btn">Place Bet</button>
+            <p id="bet-info" class="neutral">Place your bet!</p>
         </div>
 
-        <div id="game-screen" style="display: none;">
-            <canvas id="game-canvas"></canvas>
-            <div id="hud">
-                <div id="hero-info">
-                    <img id="hero-icon" src="https://via.placeholder.com/50" alt="Hero">
-                    <span id="hero-name">ADBOSS</span>
-                    <span id="hero-power">TIME STOP</span>
-                </div>
-                <div id="coins">Coins: 0</div>
-                <div id="health">Health: 100%</div>
-            </div>
+        <div id="past-predictions">
+            <h2>Past Predictions</h2>
+            <ul id="predictions-list">
+                </ul>
         </div>
     </div>
 
     <script>
-        // Game Constants
-        const HEROES = [
-            {
-                name: "ADBOSS",
-                power: "TIME STOP",
-                color: "#ff5555",
-                dialogue: "अब रुकेगा वक्त!",
-                key: "1"
-            },
-            {
-                name: "ARVIND",
-                power: "PIG ATTACK",
-                color: "#55ff55",
-                dialogue: "मेरे सूअर संभालेंगे!",
-                key: "2"
-            },
-            {
-                name: "ARYANSH",
-                power: "BLUECOW JUMP",
-                color: "#5555ff",
-                dialogue: "नीली गाय की उड़ान से कोई नहीं बचेगा!",
-                key: "3"
-            },
-            {
-                name: "SAWAI",
-                power: "BULL ATTACK",
-                color: "#ffff55",
-                dialogue: "भैंसा आएगा, उड़ाएगा!",
-                key: "4"
-            },
-            {
-                name: "ARYANSH",
-                power: "X-RAY LASER",
-                color: "#ff55ff",
-                dialogue: "मेरी नज़र से कोई नहीं बचेगा!",
-                key: "5"
-            }
-        ];
+        const balanceDisplay = document.getElementById('balance');
+        const timerDisplay = document.getElementById('timer');
+        const colorDisplay = document.getElementById('color-display');
+        const colorSelect = document.getElementById('color-select');
+        const numberInput = document.getElementById('number-input');
+        const betAmountInput = document.getElementById('bet-amount');
+        const placeBetBtn = document.getElementById('place-bet-btn');
+        const betInfo = document.getElementById('bet-info');
+        const predictionsList = document.getElementById('predictions-list');
 
-        // Game Variables
-        let canvas, ctx;
-        let gameRunning = false;
-        let coins = 0;
-        let health = 100;
-        let currentHero = 0;
-        let heroX = 100;
-        let heroY = 100;
-        let enemies = [];
-        let projectiles = [];
-        let pigs = [];
-        let gameTime = 0;
-        let timeStopped = false;
+        // Only three colors: red, green, blue
+        const colors = ['red', 'green', 'blue'];
+        const GREEN_RARITY_FACTOR = 0.2; // Green appears 20% of the time, red/blue 40% each
 
-        // Initialize Game
-        function initGame() {
-            canvas = document.getElementById('game-canvas');
-            ctx = canvas.getContext('2d');
-            
-            // Set canvas size
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            
-            // Event listeners
-            document.getElementById('start-btn').addEventListener('click', startGame);
-            window.addEventListener('keydown', handleKeyPress);
-            window.addEventListener('resize', resizeCanvas);
+        let countdown = 30;
+        let timerInterval;
+        let userBalance = 50;
+        let canBet = true; // Flag to control betting during countdown
+        let currentBet = {
+            color: null,
+            number: null,
+            amount: 0,
+            placed: false
+        };
+        let roundNumber = 0; // To track periods
+
+        updateBalanceDisplay();
+
+        function updateBalanceDisplay() {
+            balanceDisplay.textContent = `Balance: ₹${userBalance}`;
         }
 
-        // Start Game
-        function startGame() {
-            document.getElementById('main-menu').style.display = 'none';
-            document.getElementById('game-screen').style.display = 'block';
-            
-            // Reset game state
-            coins = 0;
-            health = 100;
-            currentHero = 0;
-            enemies = [];
-            projectiles = [];
-            pigs = [];
-            gameTime = 0;
-            
-            updateHUD();
-            gameRunning = true;
-            
-            // Start game loop
-            requestAnimationFrame(gameLoop);
-            
-            // Spawn enemies periodically
-            setInterval(spawnEnemy, 2000);
-        }
+        function updateTimer() {
+            timerDisplay.textContent = countdown;
+            if (countdown <= 0) {
+                clearInterval(timerInterval);
+                canBet = false; // Disable betting when timer hits 0 and results are shown
 
-        // Game Loop
-        function gameLoop(timestamp) {
-            if (!gameRunning) return;
-            
-            // Clear canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Update game time
-            if (!timeStopped) {
-                gameTime += 1;
-            }
-            
-            // Draw hero
-            drawHero();
-            
-            // Update and draw enemies
-            updateEnemies();
-            
-            // Update and draw projectiles
-            updateProjectiles();
-            
-            // Update and draw pigs (for ARVIND's power)
-            updatePigs();
-            
-            // Continue game loop
-            requestAnimationFrame(gameLoop);
-        }
+                const winningColor = changeColor(); // This now changes the background color
+                const winningNumber = generateRandomNumber();
+                colorDisplay.textContent = winningNumber; // Display the number in the circle
 
-        // Draw Hero
-        function drawHero() {
-            ctx.fillStyle = HEROES[currentHero].color;
-            ctx.beginPath();
-            ctx.arc(heroX, heroY, 20, 0, Math.PI * 2);
-            ctx.fill();
-            
-            // Draw hero name
-            ctx.fillStyle = 'white';
-            ctx.font = '12px Arial';
-            ctx.fillText(HEROES[currentHero].name, heroX - 20, heroY - 25);
-        }
-
-        // Spawn Enemy
-        function spawnEnemy() {
-            if (!gameRunning || timeStopped) return;
-            
-            const enemy = {
-                x: canvas.width,
-                y: Math.random() * (canvas.height - 100) + 50,
-                width: 40,
-                height: 40,
-                speed: 2 + Math.random() * 2,
-                health: 30
-            };
-            
-            enemies.push(enemy);
-        }
-
-        // Update Enemies
-        function updateEnemies() {
-            for (let i = 0; i < enemies.length; i++) {
-                const enemy = enemies[i];
+                handleBettingResult(winningColor, winningNumber);
                 
-                if (!timeStopped) {
-                    enemy.x -= enemy.speed;
-                }
-                
-                // Draw enemy
-                ctx.fillStyle = '#aa0000';
-                ctx.fillRect(enemy.x, enemy.y, enemy.width, enemy.height);
-                
-                // Draw health bar
-                ctx.fillStyle = 'red';
-                ctx.fillRect(enemy.x, enemy.y - 10, enemy.width, 5);
-                ctx.fillStyle = 'green';
-                ctx.fillRect(enemy.x, enemy.y - 10, enemy.width * (enemy.health / 30), 5);
-                
-                // Check collision with hero
-                if (checkCollision(
-                    { x: heroX, y: heroY, radius: 20 },
-                    { x: enemy.x + enemy.width/2, y: enemy.y + enemy.height/2, radius: 20 }
-                )) {
-                    health -= 5;
-                    updateHUD();
-                    enemies.splice(i, 1);
-                    i--;
-                    
-                    if (health <= 0) {
-                        gameOver();
-                    }
-                }
-                
-                // Remove if off screen
-                if (enemy.x < -enemy.width) {
-                    enemies.splice(i, 1);
-                    i--;
-                }
+                countdown = 30; // Reset for next round
+                setTimeout(() => { // Add a slight delay before starting the next round
+                    canBet = true; // Enable betting for the new round
+                    startTimer(); // Start the new timer
+                }, 3000); // Wait for 3 seconds to show results
+            } else {
+                countdown--;
+                // canBet is managed by placeBetBtn click and timer reset
             }
         }
 
-        // Update Projectiles
-        function updateProjectiles() {
-            for (let i = 0; i < projectiles.length; i++) {
-                const proj = projectiles[i];
-                
-                if (!timeStopped) {
-                    proj.x += proj.speedX;
-                    proj.y += proj.speedY;
+        function changeColor() {
+            let selectedColor;
+            const rand = Math.random();
+            if (rand < GREEN_RARITY_FACTOR) {
+                selectedColor = 'green';
+            } else if (rand < (GREEN_RARITY_FACTOR + (1 - GREEN_RARITY_FACTOR) / 2)) {
+                selectedColor = 'red';
+            } else {
+                selectedColor = 'blue';
+            }
+            colorDisplay.style.backgroundColor = selectedColor; // Set the background color
+            return selectedColor;
+        }
+
+        function generateRandomNumber() {
+            return Math.floor(Math.random() * 10) + 1; // Generates number between 1 and 10
+        }
+
+        function startTimer() {
+            roundNumber++; // Increment round number for each new period
+            clearInterval(timerInterval);
+            timerInterval = setInterval(updateTimer, 1000);
+            colorDisplay.textContent = '?'; // Reset display during countdown
+            colorDisplay.style.backgroundColor = 'grey'; // Reset color display to grey
+            betInfo.textContent = 'Place your bet!';
+            betInfo.className = 'neutral';
+            betAmountInput.value = ''; // Clear bet amount input
+            numberInput.value = ''; // Clear bet number input
+            currentBet.placed = false; // Reset bet status for the new round
+            currentBet.color = null;
+            currentBet.number = null;
+            currentBet.amount = 0;
+        }
+
+        function handleBettingResult(winningColor, winningNumber) {
+            let message;
+            let profit = 0;
+            let resultClass = 'neutral';
+
+            if (currentBet.placed) {
+                const betColor = currentBet.color;
+                const betNumber = currentBet.number;
+                const betAmount = currentBet.amount;
+
+                let betWasOnColor = betColor === winningColor;
+                let betWasOnNumber = !isNaN(betNumber) && betNumber === winningNumber;
+
+                if (betWasOnColor && betWasOnNumber) {
+                    profit = betAmount * 5;
+                    userBalance += profit;
+                    message = `You won ₹${profit}! (Color & Number)`;
+                    resultClass = 'win';
+                } else if (betWasOnColor) {
+                    profit = betAmount * 2;
+                    userBalance += profit;
+                    message = `You won ₹${profit}! (Color)`;
+                    resultClass = 'win';
+                } else if (betWasOnNumber) {
+                    profit = betAmount * 3;
+                    userBalance += profit;
+                    message = `You won ₹${profit}! (Number)`;
+                    resultClass = 'win';
+                } else {
+                    profit = -betAmount;
+                    userBalance += profit; // Subtract bet amount
+                    message = `You lost ₹${betAmount}.`;
+                    resultClass = 'lose';
                 }
-                
-                // Draw projectile
-                ctx.fillStyle = proj.color;
-                ctx.beginPath();
-                ctx.arc(proj.x, proj.y, proj.radius, 0, Math.PI * 2);
-                ctx.fill();
-                
-                // Check collision with enemies
+            } else {
+                message = "No valid bet was placed this round.";
+                resultClass = 'neutral';
+            }
+
+            betInfo.textContent = `The winning color was ${winningColor} and the number was ${winningNumber}. ${message}`;
+            betInfo.className = resultClass;
+            updateBalanceDisplay();
+            addPredictionRecord(roundNumber, winningColor, winningNumber, profit);
+        }
+
+        function addPredictionRecord(period, color, number, profit) {
+            const listItem = document.createElement('li');
+            const profitClass = profit > 0 ? 'profit-positive' : (profit < 0 ? 'profit-negative' : 'profit-neutral');
+            const profitText = profit > 0 ? `+₹${profit}` : (profit < 0 ? `-₹${Math.abs(profit)}` : `₹0`);
+
+            listItem.innerHTML = `
+                <span>Period ${period}: <strong>${color.charAt(0).toUpperCase() + color.slice(1)}</strong> (${number})</span>
+                <span class="${profitClass}">Profit: ${profitText}</span>
+            `;
+            predictionsList.prepend(listItem); // Add to the top of the list
+            if (predictionsList.children.length > 10) { // Keep only the last 10 records
+                predictionsList.removeChild(predictionsList.lastChild);
+            }
+        }
+
+        placeBetBtn.addEventListener('click', () => {
+            if (canBet) {
+                const betAmount = parseInt(betAmountInput.value);
+                const betNumber = parseInt(numberInput.value);
+                const betColor = colorSelect.value;
+
+                if (isNaN(betAmount) || betAmount <= 0) {
+                    betInfo.textContent = 'Please enter a valid bet amount greater than 0.';
+                    betInfo.className = 'lose';
+                    return;
+                }
+                if (betAmount > userBalance) {
+                    betInfo.textContent = 'Insufficient balance to place this bet.';
+                    betInfo.className = 'lose';
+                    return;
+                }
+                if (isNaN(betNumber) || betNumber < 1 || betNumber > 10) {
+                    // Allow betting on color only if number is invalid/empty
+                    betInfo.textContent = `Bet placed on ${betColor} for ₹${betAmount}. Waiting for the round to end...`;
+                    betInfo.className = 'neutral';
+                    currentBet.color = betColor;
+                    currentBet.number = null; // No number bet
+                    currentBet.amount = betAmount;
+                    currentBet.placed = true;
+                    canBet = false; // Disable betting immediately after placing a bet for the current round
+                    return;
+                }
+
+                betInfo.textContent = `Bet placed on ${betColor} and number ${betNumber} for ₹${betAmount}. Waiting for the round to end...`;
+                betInfo.className = 'neutral';
+                currentBet.color = betColor;
+                currentBet.number = betNumber;
+                currentBet.amount = betAmount;
+                currentBet.placed = true;
+                canBet = false; // Disable betting immediately after placing a bet for the current round
+            } else {
+                betInfo.textContent = 'Please wait for the current round to finish before placing a new bet.';
+                betInfo.className = 'neutral';
+            }
+        });
+
+        // Start the timer when the page loads
+        startTimer();
+    </script>
+</body>
+</html>
